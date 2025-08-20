@@ -23,13 +23,13 @@ The motivation is simple yet ambitious: to bring algorithmic analysis directly i
 
 <!-- core features -->
 
-- [ ] **Automated Complexity Analysis**: Computes Big O notation for time and space complexity
-- [ ] **Block-level Analysis**: Granular complexity computation for each code block
-- [ ] **AST-Based Parsing**: Uses Acorn parser for accurate JavaScript code parsing
-- [ ] **No Pattern Matching**: Pure algorithmic analysis without relying on pre-known patterns
+- **Automated Complexity Analysis**: Computes Big O notation for time and space complexity
+- **Block-level Analysis**: Granular complexity computation for each code block
+- **AST-Based Parsing**: Uses Acorn parser for accurate JavaScript code parsing
+- **No Pattern Matching**: Pure algorithmic analysis without relying on pre-known patterns
   <!-- smart heuristics -->
-- [ ] **Conservative Estimates**: Provides reasonable defaults for unknown code
-- [ ] **Built-in Method Knowledge**: Knows complexity of basic Array/Object methods
+- **Conservative Estimates**: Provides reasonable defaults for unknown code
+- **Built-in Method Knowledge**: Knows complexity of basic Array/Object methods
 
 ## Quick Start
 
