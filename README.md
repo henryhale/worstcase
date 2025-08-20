@@ -133,16 +133,6 @@ To get started with development, follow these steps:
 
 ## Architecture
 
-┌─────────────────┐ ┌──────────────────┐ ┌─────────────────┐
-│ JavaScript │───▶│ Acorn Parser │───▶│ AST Traversal │
-│ Code │ │ │ │ │
-└─────────────────┘ └──────────────────┘ └─────────────────┘
-│
-┌─────────────────┐ ┌──────────────────┐ ┌─────────────────┐
-│ Results │◀───│ Complexity │◀───│ Block-Level │
-│ Visualization │ │ Computation │ │ Analysis │
-└─────────────────┘ └──────────────────┘ └─────────────────┘
-
 The analyzer uses a multi-step approach:
 
 1. **Parsing**: Uses Acorn to generate Abstract Syntax Tree (AST)
