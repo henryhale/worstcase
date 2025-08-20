@@ -35,7 +35,6 @@ jobs:
               with:
                   registry-url: https://registry.npmjs.org/
                   node-version: latest
-                  cache: pnpm
 
             # Install pnpm
             - uses: pnpm/action-setup@v4
