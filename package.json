@@ -1,6 +1,6 @@
 {
     "name": "worstcase",
-    "version": "0.0.0",
+    "version": "0.1.0",
     "description": "Automatically analyze time and space complexity of JavaScript code",
     "main": "./dist/index.cjs",
     "module": "./dist/index.mjs",
