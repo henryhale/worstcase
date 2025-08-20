@@ -1,0 +1,65 @@
+{
+    "name": "worstcase",
+    "version": "0.0.0",
+    "description": "Automatically analyze time and space complexity of JavaScript code",
+    "main": "./dist/index.cjs",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
+    "files": [
+        "./dist/",
+        "./README.md",
+        "./LICENSE.txt"
+    ],
+    "exports": {
+        ".": {
+            "import": {
+                "default": "./dist/index.mjs",
+                "types": "./dist/index.d.mts"
+            },
+            "require": {
+                "default": "./dist/index.cjs",
+                "types": "./dist/index.d.cts"
+            }
+        }
+    },
+    "scripts": {
+        "dev": "vite",
+        "build": "unbuild",
+        "format": "prettier --write .",
+        "release": "release-it --ci",
+        "prepack": "unbuild",
+        "test": "vitest run"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/henryhale/worstcase.git"
+    },
+    "keywords": [
+        "big-o",
+        "algorithm-analysis",
+        "worst-case"
+    ],
+    "author": {
+        "name": "Henry Hale",
+        "url": "https://github.com/henryhale"
+    },
+    "license": "MIT",
+    "type": "module",
+    "bugs": {
+        "url": "https://github.com/henryhale/worstcase/issues"
+    },
+    "homepage": "https://github.com/henryhale/worstcase#readme",
+    "packageManager": "pnpm@10.14.0",
+    "devDependencies": {
+        "@release-it/conventional-changelog": "^10.0.1",
+        "prettier": "^3.6.2",
+        "release-it": "^19.0.4",
+        "typescript": "^5.9.2",
+        "unbuild": "^3.6.1",
+        "vite": "^7.1.2",
+        "vitest": "^3.2.4"
+    },
+    "dependencies": {
+        "acorn": "^8.15.0"
+    }
+}
