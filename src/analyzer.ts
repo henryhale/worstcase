@@ -1,4 +1,18 @@
-import * as acorn from "acorn";
+import { parse } from "acorn";
+import type {
+    Statement,
+    Program,
+    Expression,
+    BlockStatement,
+    FunctionDeclaration,
+    ForStatement,
+    WhileStatement,
+    CallExpression,
+    VariableDeclaration,
+    DoWhileStatement,
+    Node,
+    IfStatement
+} from "acorn";
 import { Complexity } from "./complexity";
 import type { WCAnalysis, WCBlockResult, WCResult } from "./types";
 
@@ -21,7 +35,7 @@ export class ComplexityAnalyzer {
         try {
             this.results = [];
 
-            const ast = acorn.parse(code, {
+            const ast = parse(code, {
                 ecmaVersion: 2020,
                 locations: true,
                 sourceType: "module"
@@ -41,9 +55,7 @@ export class ComplexityAnalyzer {
     /**
      * analyze a node's space and time complexity
      */
-    private visit(
-        node: acorn.Statement | acorn.Program | acorn.Expression
-    ): WCBlockResult {
+    private visit(node: Statement | Program | Expression): WCBlockResult {
         if (!node) {
             return { space: new Complexity(), time: new Complexity() };
         }
@@ -80,13 +92,11 @@ export class ComplexityAnalyzer {
         }
     }
 
-    private visitProgram(node: acorn.Program): WCBlockResult {
-        return this.visitBlockStatement(
-            node as unknown as acorn.BlockStatement
-        );
+    private visitProgram(node: Program): WCBlockResult {
+        return this.visitBlockStatement(node as unknown as BlockStatement);
     }
 
-    private visitBlockStatement(node: acorn.BlockStatement): WCBlockResult {
+    private visitBlockStatement(node: BlockStatement): WCBlockResult {
         let timeComplexity = new Complexity();
         let spaceComplexity = new Complexity();
 
@@ -105,9 +115,7 @@ export class ComplexityAnalyzer {
         return { time: timeComplexity, space: spaceComplexity };
     }
 
-    private visitFunctionDeclaration(
-        node: acorn.FunctionDeclaration
-    ): WCBlockResult {
+    private visitFunctionDeclaration(node: FunctionDeclaration): WCBlockResult {
         this.functionStack.push(node.id.name);
         const bodyComplexity = this.visit(node.body);
         this.functionStack.pop();
@@ -122,7 +130,7 @@ export class ComplexityAnalyzer {
         return bodyComplexity;
     }
 
-    private visitForStatement(node: acorn.ForStatement): WCBlockResult {
+    private visitForStatement(node: ForStatement): WCBlockResult {
         // analyze loop bounds
         const iterations = this.analyzeLoopBounds(node);
         const bodyComplexity = this.visit(node.body);
@@ -137,7 +145,7 @@ export class ComplexityAnalyzer {
         return { time: timeComplexity, space: spaceComplexity };
     }
 
-    private visitWhileStatement(node: acorn.WhileStatement): WCBlockResult {
+    private visitWhileStatement(node: WhileStatement): WCBlockResult {
         // conservative estimate: assume O(n) iterations unless obvious
         const iterations = new Complexity("n");
         const bodyComplexity = this.visit(node.body);
@@ -152,7 +160,7 @@ export class ComplexityAnalyzer {
         return { time: timeComplexity, space: spaceComplexity };
     }
 
-    private visitIfStatement(node: acorn.IfStatement): WCBlockResult {
+    private visitIfStatement(node: IfStatement): WCBlockResult {
         const consequentComplexity = this.visit(node.consequent);
 
         let alternateComplexity = {
@@ -181,7 +189,7 @@ export class ComplexityAnalyzer {
      * TODO:
      * - add more known & critical patterns for RegExp, Map, Set, DOM and more
      */
-    private visitCallExpression(node: acorn.CallExpression): WCBlockResult {
+    private visitCallExpression(node: CallExpression): WCBlockResult {
         // default to O(1) for unknown functions
         let complexity = new Complexity();
 
@@ -202,9 +210,7 @@ export class ComplexityAnalyzer {
         return { time: complexity, space: new Complexity() };
     }
 
-    private visitVariableDeclaration(
-        node: acorn.VariableDeclaration
-    ): WCBlockResult {
+    private visitVariableDeclaration(node: VariableDeclaration): WCBlockResult {
         let spaceComplexity = new Complexity(
             node.declarations.length.toString()
         );
@@ -230,7 +236,7 @@ export class ComplexityAnalyzer {
         return { time: new Complexity(), space: spaceComplexity };
     }
 
-    private visitGeneric(node: acorn.Node): WCBlockResult {
+    private visitGeneric(node: Node): WCBlockResult {
         // default case: visit all child nodes and combine
         let timeComplexity = new Complexity();
         let spaceComplexity = new Complexity();
@@ -270,7 +276,7 @@ export class ComplexityAnalyzer {
      * - improve heuristics
      */
     private analyzeLoopBounds(
-        node: acorn.WhileStatement | acorn.ForStatement | acorn.DoWhileStatement
+        node: WhileStatement | ForStatement | DoWhileStatement
     ): Complexity {
         // simple heuristic: look for common patterns
         if (node.test && node.test.type === "BinaryExpression") {
@@ -281,8 +287,8 @@ export class ComplexityAnalyzer {
     }
 
     private addResult(
-        type: acorn.Node["type"],
-        node: acorn.Node,
+        type: Node["type"],
+        node: Node,
         timeComplexity: Complexity,
         spaceComplexity: Complexity
     ): void {

@@ -1,5 +1,7 @@
 <div align=center>
 
+🧐
+
 # worstcase
 
 Automatically analyze time and space complexity of JavaScript code without relying on pattern matching
@@ -27,7 +29,7 @@ The motivation is simple yet ambitious: to bring algorithmic analysis directly i
 - **Block-level Analysis**: Granular complexity computation for each code block
 - **AST-Based Parsing**: Uses Acorn parser for accurate JavaScript code parsing
 - **No Pattern Matching**: Pure algorithmic analysis without relying on pre-known patterns
-  <!-- smart heuristics -->
+    <!-- smart heuristics -->
 - **Conservative Estimates**: Provides reasonable defaults for unknown code
 - **Built-in Method Knowledge**: Knows complexity of basic Array/Object methods
 
