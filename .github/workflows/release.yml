@@ -2,11 +2,11 @@ name: Release NPM package
 
 on:
     workflow_dispatch:
-    # push:
-    #     branches:
-    #         - master
-    #     paths:
-    #         - source/**
+    push:
+        branches:
+            - master
+        paths:
+            - source/**
 
 permissions:
     contents: write
