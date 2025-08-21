@@ -1,14 +1,9 @@
 <div align=center>
-
-🧐
-
-# worstcase
-
-Automatically analyze time and space complexity of JavaScript code without relying on pattern matching
-
+<img width="40" src="https://github.com/henryhale/worstcase/raw/master/public/logo.svg" />
+<h1>worstcase</h1>
+<p>Automatically analyze time and space complexity of JavaScript code without relying on pattern matching</p>
 <img alt="npm" src="https://img.shields.io/npm/v/worstcase">
 <img alt="GitHub" src="https://img.shields.io/github/license/henryhale/worstcase">
-
 </div>
 
 ## Overview
@@ -23,13 +18,10 @@ The motivation is simple yet ambitious: to bring algorithmic analysis directly i
 
 ## Features
 
-<!-- core features -->
-
 - **Automated Complexity Analysis**: Computes Big O notation for time and space complexity
 - **Block-level Analysis**: Granular complexity computation for each code block
 - **AST-Based Parsing**: Uses Acorn parser for accurate JavaScript code parsing
 - **No Pattern Matching**: Pure algorithmic analysis without relying on pre-known patterns
-    <!-- smart heuristics -->
 - **Conservative Estimates**: Provides reasonable defaults for unknown code
 - **Built-in Method Knowledge**: Knows complexity of basic Array/Object methods
 
