@@ -25,7 +25,7 @@ function analyzeCode(): void {
     }
 
     try {
-        const analysis = analyzeComplexity(code);
+        const analysis = analyzeComplexity(code, { clean: false });
 
         displayResults(analysis, code);
 
