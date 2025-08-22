@@ -1,14 +1,15 @@
 import { ComplexityAnalyzer } from "./analyzer";
-import type { WCAnalysis } from "./types";
+import type { WCAnalysis, WCOptions } from "./types";
 
 /**
  * compute space and time complexity of the given piece of code
  * @param code javascript code to analyze
+ * @param options configure the analyzer - _optional_ 
  * @returns block by block analysis and overall results
  */
-export function analyzeComplexity(code: string): WCAnalysis {
-    const ca = new ComplexityAnalyzer();
+export function analyzeComplexity(code: string, options?: Partial<WCOptions>): WCAnalysis {
+    const ca = new ComplexityAnalyzer(options);
     return ca.analyze(code);
 }
 
-export type { WCAnalysis, WCResult } from "./types";
+export type { WCOptions, WCAnalysis, WCResult } from "./types";

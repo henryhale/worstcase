@@ -1,3 +1,7 @@
+function isNumber(x: string): boolean {
+    return /^\d+$/.test(x)
+}
+
 /**
  * A data structure to manage terms of a space or time complexity expression
  */
@@ -80,7 +84,7 @@ export class Complexity {
 
             // extract and simplify coefficients
             let i = 0;
-            while (/^\d+$/.test(segs[i])) {
+            while (isNumber(segs[i])) {
                 coeff.push(segs[i]);
                 i++;
             }
@@ -107,8 +111,8 @@ export class Complexity {
                 term === "none"
                     ? coefficient.toString()
                     : coefficient === 1
-                      ? term
-                      : `${coefficient}*${term}`
+                        ? term
+                        : `${coefficient}*${term}`
             );
         }
 
@@ -170,18 +174,33 @@ export class Complexity {
 
     /**
      * get the leading term in the standard form
+     * 
+     * @param clean whether or not to drop coefficients
      */
-    public toString() {
-        const term = this.leadingTerm || "1";
+    public toString(clean?: boolean) {
+        let term = this.leadingTerm || "1";
+
+        // drop coefficient if `clean` is true
+        if (!!clean) {
+            if (isNumber(term)) {
+                term = '1'
+            } else {
+                const parts = term.split('*')
+                if (parts.length > 1 && isNumber(parts[0])) {
+                    parts.shift()
+                    term = parts.join('*')
+                }
+            }
+        }
 
         // transform: 'n*n' into 'n^2'
-        const cleanTerm = term
+        term = term
             .split("*")
             .join("")
             .replace(/n+/g, (m) =>
                 m.length === 1 ? m : `${m[0]}^${m.length}`
             );
 
-        return `O(${cleanTerm})`;
+        return `O(${term})`;
     }
 }

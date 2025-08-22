@@ -73,20 +73,25 @@ console.log(analysis.overall.space); // O(1)
 
 ## API Reference
 
-### `analyzeComplexity(code: string): AnalysisResult`
+### `analyzeComplexity(code: string, options?: Partial<WCOptions>): WCAnalysis`
 
 Analyzes JavaScript code and returns complexity information.
 
 #### Parameters
 
-| Parameter | Type     | Description                       |
-| --------- | -------- | --------------------------------- |
-| `code`    | `string` | JavaScript source code to analyze |
+| Parameter | Type                              | Description                       |
+| --------- | --------------------------------- | --------------------------------- |
+| `code`    | `string`                          | JavaScript source code to analyze |
+| `options` | `Partial<WCOptions> \| undefined` | Configure the analyzer            |
 
-#### Returns: `AnalysisResult`
+#### Returns: `WCAnalysis`
 
 ```typescript
-interface AnalysisResult {
+type WCOptions = {
+    clean: boolean; // Whether or not to drop coefficients - default: true
+};
+
+interface WCAnalysis {
     overall: {
         time: string; // Overall time complexity (e.g., "O(n^2)")
         space: string; // Overall space complexity (e.g., "O(1)")

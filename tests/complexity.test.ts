@@ -49,18 +49,21 @@ describe("complexity", () => {
         const c2 = new Complexity();
         c2.terms = ["1", "2", "n*n", "n"];
 
-        expect(c1.add(c2).toString()).toBe("O(4n^2)");
+        expect(c1.add(c2).toString(true)).toBe("O(n^2)");
+        expect(c1.add(c2).toString(false)).toBe("O(4n^2)");
     });
 
     test("leading term string", () => {
         const c1 = new Complexity("1");
         expect(c1.toString()).toStrictEqual("O(1)");
 
-        c1.terms = ["n"];
-        expect(c1.toString()).toStrictEqual("O(n)");
+        c1.terms = ["2*n"];
+        expect(c1.toString(true)).toStrictEqual("O(n)");
+        expect(c1.toString(false)).toStrictEqual("O(2n)");
 
         const c2 = new Complexity();
-        c2.terms = ["n*n", "n^2", "2^n", "log(n)", "n"];
-        expect(c2.toString()).toStrictEqual("O(n^2)");
+        c2.terms = ["3*n*n", "2^n", "log(n)", "n"];
+        expect(c2.toString(true)).toStrictEqual("O(n^2)");
+        expect(c2.toString(false)).toStrictEqual("O(3n^2)");
     });
 });

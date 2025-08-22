@@ -14,16 +14,22 @@ import type {
     IfStatement
 } from "acorn";
 import { Complexity } from "./complexity";
-import type { WCAnalysis, WCBlockResult, WCResult } from "./types";
+import type { WCAnalysis, WCBlockResult, WCOptions, WCResult } from "./types";
 
 // Complexity analyzer
 export class ComplexityAnalyzer {
     private results: WCResult[];
     private functionStack: string[];
+    private options: WCOptions;
 
-    constructor() {
+    constructor(options: Partial<WCOptions> = {}) {
         this.results = [];
         this.functionStack = [];
+
+        this.options = {
+            clean: true,
+            ...options
+        }
     }
 
     /**
@@ -45,7 +51,7 @@ export class ComplexityAnalyzer {
 
             return {
                 results: this.results,
-                overall: { space: space.toString(), time: time.toString() }
+                overall: { space: space.toString(this.options.clean), time: time.toString(this.options.clean) }
             };
         } catch (error) {
             throw new Error(`Parse error: ${error.message}`);
@@ -295,8 +301,8 @@ export class ComplexityAnalyzer {
         this.results.push({
             type,
             location: `Line ${node.loc ? node.loc.start.line : "?"}`,
-            time: timeComplexity.toString(),
-            space: spaceComplexity.toString(),
+            time: timeComplexity.toString(this.options.clean),
+            space: spaceComplexity.toString(this.options.clean),
             node
         });
     }
