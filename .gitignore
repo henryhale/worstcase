@@ -34,3 +34,6 @@ out/
 
 # Build output
 dist/
+
+# npm auth
+.npmrc

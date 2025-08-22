@@ -26,7 +26,6 @@
         "dev": "vite",
         "build": "unbuild",
         "format": "prettier --write .",
-        "release": "release-it --ci",
         "prepack": "unbuild",
         "test": "vitest run"
     },
