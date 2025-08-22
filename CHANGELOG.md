@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.1.1](https://github.com/henryhale/worstcase/compare/v1.1.0...v1.1.1) (2025-08-22)
+
+### Bug Fixes
+
+* remove auto-changelog script for release-it workflow ([a764f68](https://github.com/henryhale/worstcase/commit/a764f6805f3f65ab31aacb18906f5915f0887964))
+
 ## [1.1.0](https://github.com/henryhale/worstcase/compare/v1.0.0...v1.1.0) (2025-08-22)
 
 ### Features
