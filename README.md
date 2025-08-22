@@ -38,13 +38,13 @@ Check the Monaco Editor integration demo:
 
 ```bash
 # npm
-npm install worstcase
+npm install acorn worstcase
 
 # yarn
-yarn add worstcase
+yarn add acorn worstcase
 
 # pnpm
-pnpm add worstcase
+pnpm add acorn worstcase
 ```
 
 ## Basic Usage
