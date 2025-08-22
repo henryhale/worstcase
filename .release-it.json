@@ -2,8 +2,7 @@
     "git": {
         "tagName": "v${version}",
         "commitMessage": "chore(release): v${version}",
-        "requireBranch": "master",
-        "changelog": "pnpm exec auto-changelog --stdout --commit-limit false --unreleased --template https://raw.githubusercontent.com/release-it/release-it/main/templates/changelog-compact.hbs"
+        "requireBranch": "master"
     },
     "changelogFile": "CHANGELOG.md",
     "github": {
