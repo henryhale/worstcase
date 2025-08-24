@@ -54,7 +54,6 @@
         "@release-it/conventional-changelog": "^10.0.1",
         "eslint": "^9.34.0",
         "globals": "^16.3.0",
-        "lint-staged": "^16.1.5",
         "prettier": "^3.6.2",
         "release-it": "^19.0.4",
         "typescript": "^5.9.2",
@@ -65,8 +64,5 @@
     },
     "dependencies": {
         "acorn": "^8.15.0"
-    },
-    "lint-staged": {
-        "*.ts": "pnpm lint && pnpm test"
     }
 }
