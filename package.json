@@ -25,7 +25,8 @@
     "scripts": {
         "dev": "vite",
         "build": "unbuild",
-        "format": "prettier --write .",
+        "lint": "eslint demo src tests && prettier --check .",
+        "lint:fix": "eslint --fix demo src tests && prettier --write .",
         "prepack": "unbuild",
         "test": "vitest run"
     },
@@ -49,15 +50,23 @@
     },
     "homepage": "https://github.com/henryhale/worstcase#readme",
     "devDependencies": {
+        "@eslint/js": "^9.34.0",
         "@release-it/conventional-changelog": "^10.0.1",
+        "eslint": "^9.34.0",
+        "globals": "^16.3.0",
+        "lint-staged": "^16.1.5",
         "prettier": "^3.6.2",
         "release-it": "^19.0.4",
         "typescript": "^5.9.2",
+        "typescript-eslint": "^8.40.0",
         "unbuild": "^3.6.1",
         "vite": "^7.1.2",
         "vitest": "^3.2.4"
     },
     "dependencies": {
         "acorn": "^8.15.0"
+    },
+    "lint-staged": {
+        "*.ts": "pnpm lint && pnpm test"
     }
 }

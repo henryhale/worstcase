@@ -1,6 +1,6 @@
 import * as samples from "./snippets";
 
-export function initSamples<T extends Function>(fn: T) {
+export function initSamples(fn: (code: string) => void) {
     const buttons: HTMLButtonElement[] = [];
 
     for (const key in samples) {

@@ -1,4 +1,4 @@
-import { describe, test, expect, beforeEach } from "vitest";
+import { describe, test, expect } from "vitest";
 import { ComplexityAnalyzer } from "../src/analyzer";
 
 const code = `function bubbleSort(arr) {
@@ -21,7 +21,7 @@ describe("complexity analyzer", () => {
             space: "O(1)",
             time: "O(n^2)"
         });
-    })
+    });
 
     test("with coefficients - clean: false", () => {
         const ca = new ComplexityAnalyzer({ clean: false });
@@ -31,6 +31,5 @@ describe("complexity analyzer", () => {
             space: "O(53)",
             time: "O(43n^2)"
         });
-    })
-
+    });
 });
