@@ -1,5 +1,5 @@
 function isNumber(x: string): boolean {
-    return /^\d+$/.test(x)
+    return /^\d+$/.test(x);
 }
 
 /**
@@ -111,8 +111,8 @@ export class Complexity {
                 term === "none"
                     ? coefficient.toString()
                     : coefficient === 1
-                        ? term
-                        : `${coefficient}*${term}`
+                      ? term
+                      : `${coefficient}*${term}`
             );
         }
 
@@ -174,7 +174,7 @@ export class Complexity {
 
     /**
      * get the leading term in the standard form
-     * 
+     *
      * @param clean whether or not to drop coefficients
      */
     public toString(clean?: boolean) {
@@ -183,12 +183,12 @@ export class Complexity {
         // drop coefficient if `clean` is true
         if (!!clean) {
             if (isNumber(term)) {
-                term = '1'
+                term = "1";
             } else {
-                const parts = term.split('*')
+                const parts = term.split("*");
                 if (parts.length > 1 && isNumber(parts[0])) {
-                    parts.shift()
-                    term = parts.join('*')
+                    parts.shift();
+                    term = parts.join("*");
                 }
             }
         }

@@ -29,7 +29,7 @@ export class ComplexityAnalyzer {
         this.options = {
             clean: true,
             ...options
-        }
+        };
     }
 
     /**
@@ -51,7 +51,10 @@ export class ComplexityAnalyzer {
 
             return {
                 results: this.results,
-                overall: { space: space.toString(this.options.clean), time: time.toString(this.options.clean) }
+                overall: {
+                    space: space.toString(this.options.clean),
+                    time: time.toString(this.options.clean)
+                }
             };
         } catch (error) {
             throw new Error(`Parse error: ${error.message}`);
@@ -106,7 +109,7 @@ export class ComplexityAnalyzer {
         let timeComplexity = new Complexity();
         let spaceComplexity = new Complexity();
 
-        for (let stmt of node.body) {
+        for (const stmt of node.body) {
             const stmtComplexity = this.visit(stmt);
             timeComplexity = timeComplexity.add(
                 stmtComplexity.time || stmtComplexity
@@ -222,7 +225,7 @@ export class ComplexityAnalyzer {
         );
 
         // analyze initializers
-        for (let decl of node.declarations) {
+        for (const decl of node.declarations) {
             if (decl.init) {
                 this.visit(decl.init);
                 // if initializing with array/object, add space
@@ -248,10 +251,10 @@ export class ComplexityAnalyzer {
         let spaceComplexity = new Complexity();
 
         if (node && typeof node === "object") {
-            for (let key in node) {
+            for (const key in node) {
                 const child = node[key];
                 if (Array.isArray(child)) {
-                    for (let item of child) {
+                    for (const item of child) {
                         if (item && typeof item === "object" && item.type) {
                             const childComplexity = this.visit(item);
                             timeComplexity = timeComplexity.add(

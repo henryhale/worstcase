@@ -4,11 +4,11 @@ import { Complexity } from "./complexity";
 export type WCOptions = {
     /**
      * whether or not to drop coefficients
-     * 
+     *
      * @default true
      */
     clean: boolean;
-}
+};
 
 export type WCBlockResult = {
     space: Complexity;

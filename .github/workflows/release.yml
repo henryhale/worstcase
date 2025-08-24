@@ -56,7 +56,7 @@ jobs:
             - name: Create .npmrc
               run: npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
               env:
-                NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+                  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
             # Publish version to public repository
             - name: Release

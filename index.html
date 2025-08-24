@@ -1,33 +1,31 @@
 <!doctype html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>worst-case analysis</title>
+    </head>
 
-<head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>worst-case analysis</title>
-</head>
+    <body class="antialiased">
+        <div class="container">
+            <h1>
+                <img width="45" src="/logo.svg" />
+                <br />worst-case analysis
+            </h1>
 
-<body class="antialiased">
-    <div class="container">
-        <h1>
-            <img width="45" src="/logo.svg" />
-            <br />worst-case analysis
-        </h1>
+            <div class="input-section">
+                <label for="code-input">Enter JavaScript Code:</label>
+                <div id="sample-buttons"></div>
+                <textarea id="code-input" placeholder=""></textarea>
+                <button id="analyze-btn">Analyze Complexity</button>
+            </div>
 
-        <div class="input-section">
-            <label for="code-input">Enter JavaScript Code:</label>
-            <div id="sample-buttons"></div>
-            <textarea id="code-input" placeholder=""></textarea>
-            <button id="analyze-btn">Analyze Complexity</button>
+            <table></table>
+
+            <div id="error" class="error" style="display: none"></div>
         </div>
 
-        <table></table>
-
-        <div id="error" class="error" style="display: none"></div>
-    </div>
-
-    <script type="module" src="/demo/main.ts"></script>
-</body>
-
+        <script type="module" src="/demo/main.ts"></script>
+    </body>
 </html>
