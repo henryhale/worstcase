@@ -55,6 +55,110 @@ export const nested = {
 }`
 };
 
+export const typescript = {
+    name: "Typescript",
+    code: `interface User {
+    id: number;
+    name: string;
+    email: string;
+}
+
+class UserService {
+    private users: User[] = [];
+
+    addUser(user: User): void {
+        this.users.push(user);
+    }
+
+    findUser(id: number): User | undefined {
+        return this.users.find(user => user.id === id);
+    }
+
+    sortUsers(): User[] {
+        return this.users.sort((a, b) => a.name.localeCompare(b.name));
+    }
+
+    async fetchUsers(): Promise<User[]> {
+        const response = await fetch('/api/users');
+        return response.json();
+    }
+}
+
+function processUsers<T extends User>(users: T[]): T[] {
+    return users.filter(user => user.email.includes('@'));
+}`
+};
+
+export const complex = {
+    name: "Complex Code",
+    code: `class DataProcessor {
+    private cache = new Map();
+
+    async processData(data: any[]) {
+        let results = [];
+
+        // O(n) preprocessing
+        for (let item of data) {
+            if (item.valid) {
+            results.push(item.value);
+            }
+        }
+
+        // O(n^2) nested processing
+        for (let i = 0; i < results.length; i++) {
+            for (let j = i + 1; j < results.length; j++) {
+                if (results[i] > results[j]) {
+                    let temp = results[i];
+                    results[i] = results[j];
+                    results[j] = temp;
+                }
+            }
+        }
+
+        // O(n log n) sorting with caching
+        const cacheKey = JSON.stringify(results);
+        if (this.cache.has(cacheKey)) {
+            return this.cache.get(cacheKey);
+        }
+
+        results.sort();
+        this.cache.set(cacheKey, results);
+
+        return results;
+    }
+}`
+};
+
+export const react = {
+    name: "JSX",
+    code: `function UserDashboard({ users, filters }) {
+    
+    const filteredUsers = users.filter(user => 
+        filters.every(filter => user[filter.key] === filter.value)
+    );
+    
+    return (
+        <div className="dashboard">
+            <h1>User Dashboard</h1>
+            <div className="user-grid">
+                {filteredUsers.map(user => (
+                    <div key={user.id} className="user-card">
+                        <h3>{user.name}</h3>
+                        <div className="user-stats">
+                            {user.stats.map(stat => (
+                                <span key={stat.id}>
+                                    {stat.label}: {stat.value}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+}`
+};
+
 // export const recursive = {
 //     name: "Recursion",
 //     code: `function fibonacci(n) {
@@ -65,33 +169,3 @@ export const nested = {
 //     return fibonacci(n - 1) + fibonacci(n - 2);
 // }`
 // };
-
-export const complex = {
-    name: "Complex Code",
-    code: `function complexAlgorithm(data) {
-    let results = [];
-    
-    // O(n) preprocessing
-    for (let item of data) {
-        if (item.valid) {
-            results.push(item.value);
-        }
-    }
-    
-    // O(n^2) nested processing
-    for (let i = 0; i < results.length; i++) {
-        for (let j = i + 1; j < results.length; j++) {
-            if (results[i] > results[j]) {
-                let temp = results[i];
-                results[i] = results[j];
-                results[j] = temp;
-            }
-        }
-    }
-    
-    // O(n log n) sorting
-    results.sort();
-    
-    return results;
-}`
-};

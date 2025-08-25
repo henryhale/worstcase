@@ -27,7 +27,7 @@ function analyzeCode(): void {
     try {
         const analysis = analyzeComplexity(code, { clean: false });
 
-        displayResults(analysis);
+        displayResults(analysis, code);
 
         resultsBox.style.display = "table";
     } catch (error) {
@@ -37,11 +37,11 @@ function analyzeCode(): void {
 
 function h(tag: string, content?: string) {
     const element = document.createElement(tag);
-    if (content) element.textContent = content;
+    if (content) element.innerHTML = content;
     return element;
 }
 
-function displayResults(analysis: WCAnalysis): void {
+function displayResults(analysis: WCAnalysis, code: string): void {
     // top bar
     const header = h("thead");
     const headerRow = h("tr");
@@ -60,9 +60,11 @@ function displayResults(analysis: WCAnalysis): void {
 
         const row = h("tr");
         const [, line] = result.location.split(" ").map(Number);
+        const { start, end } = result.node;
+        const lineStr = code.slice(start || 0, end || 0);
         row.append(
             h("td", line.toString()),
-            h("td", result.type),
+            h("td", `<div>${result.type}</div><div>${lineStr}</div>`),
             h("td", result.space),
             h("td", result.time)
         );
