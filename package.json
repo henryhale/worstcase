@@ -1,7 +1,7 @@
 {
     "name": "worstcase",
     "version": "1.1.1",
-    "description": "Automatically analyze time and space complexity of JavaScript code",
+    "description": "Automatically analyze time and space complexity of JS/TS code",
     "main": "./dist/index.cjs",
     "module": "./dist/index.mjs",
     "types": "./dist/index.d.ts",
@@ -63,6 +63,7 @@
         "vitest": "^3.2.4"
     },
     "dependencies": {
-        "acorn": "^8.15.0"
+        "@babel/parser": "^7.28.3",
+        "@babel/types": "^7.28.2"
     }
 }

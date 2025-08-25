@@ -1,4 +1,4 @@
-import * as acorn from "acorn";
+import { Node } from "@babel/types";
 import { Complexity } from "./complexity";
 
 export type WCOptions = {
@@ -20,7 +20,7 @@ export type WCResult = {
     location: string;
     space: string;
     time: string;
-    node: acorn.Node;
+    node: Node;
 };
 
 export type WCAnalysis = {

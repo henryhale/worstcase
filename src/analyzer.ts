@@ -1,8 +1,8 @@
-import { parse } from "acorn";
+import { parse } from "@babel/parser";
 import type {
-    Statement,
+    Node,
+    File,
     Program,
-    Expression,
     BlockStatement,
     FunctionDeclaration,
     ForStatement,
@@ -10,9 +10,14 @@ import type {
     CallExpression,
     VariableDeclaration,
     DoWhileStatement,
-    Node,
-    IfStatement
-} from "acorn";
+    IfStatement,
+    FunctionExpression,
+    ArrowFunctionExpression,
+    ForInStatement,
+    ForOfStatement,
+    ClassDeclaration,
+    ClassMethod
+} from "@babel/types";
 import { Complexity } from "./complexity";
 import type { WCAnalysis, WCBlockResult, WCOptions, WCResult } from "./types";
 
@@ -41,10 +46,25 @@ export class ComplexityAnalyzer {
         try {
             this.results = [];
 
-            const ast = parse(code, {
-                ecmaVersion: 2020,
-                locations: true,
-                sourceType: "module"
+            const ast: File = parse(code, {
+                sourceType: "module",
+                plugins: [
+                    "typescript",
+                    "jsx",
+                    "topLevelAwait",
+                    "importMeta",
+                    "importAssertions",
+                    "dynamicImport",
+                    "optionalChaining",
+                    "nullishCoalescingOperator",
+                    "throwExpressions",
+                    "asyncGenerators",
+                    "functionBind",
+                    "privateIn",
+                    "classStaticBlock",
+                    "classPrivateMethods",
+                    "classProperties"
+                ]
             });
 
             const { space, time } = this.visit(ast);
@@ -57,14 +77,14 @@ export class ComplexityAnalyzer {
                 }
             };
         } catch (error) {
-            throw new Error(`Parse error: ${error.message}`);
+            throw new Error(`[worstcase] Parse error: ${error.message}`);
         }
     }
 
     /**
      * analyze a node's space and time complexity
      */
-    private visit(node: Statement | Program | Expression): WCBlockResult {
+    private visit(node: Node): WCBlockResult {
         if (!node) {
             return { space: new Complexity(), time: new Complexity() };
         }
@@ -77,9 +97,14 @@ export class ComplexityAnalyzer {
                 return this.visitBlockStatement(node);
                 break;
             case "FunctionDeclaration":
+            case "FunctionExpression":
+            case "ArrowFunctionExpression":
+            case "ClassMethod":
                 return this.visitFunctionDeclaration(node);
                 break;
             case "ForStatement":
+            case "ForInStatement":
+            case "ForOfStatement":
                 return this.visitForStatement(node);
                 break;
             case "WhileStatement":
@@ -93,6 +118,9 @@ export class ComplexityAnalyzer {
                 break;
             case "VariableDeclaration":
                 return this.visitVariableDeclaration(node);
+                break;
+            case "ClassDeclaration":
+                return this.visitClassDeclaration(node);
                 break;
 
             default:
@@ -119,18 +147,26 @@ export class ComplexityAnalyzer {
             );
         }
 
-        this.addResult("BlockStatement", node, timeComplexity, spaceComplexity);
+        this.addResult(node.type, node, timeComplexity, spaceComplexity);
 
         return { time: timeComplexity, space: spaceComplexity };
     }
 
-    private visitFunctionDeclaration(node: FunctionDeclaration): WCBlockResult {
-        this.functionStack.push(node.id.name);
+    private visitFunctionDeclaration(
+        node:
+            | FunctionDeclaration
+            | FunctionExpression
+            | ArrowFunctionExpression
+            | ClassMethod
+    ): WCBlockResult {
+        this.functionStack.push(
+            "id" in node ? node.id?.name || "anonymous" : "arrow"
+        );
         const bodyComplexity = this.visit(node.body);
         this.functionStack.pop();
 
         this.addResult(
-            "FunctionDeclaration",
+            node.type,
             node,
             bodyComplexity.time,
             bodyComplexity.space
@@ -139,7 +175,9 @@ export class ComplexityAnalyzer {
         return bodyComplexity;
     }
 
-    private visitForStatement(node: ForStatement): WCBlockResult {
+    private visitForStatement(
+        node: ForStatement | ForInStatement | ForOfStatement
+    ): WCBlockResult {
         // analyze loop bounds
         const iterations = this.analyzeLoopBounds(node);
         const bodyComplexity = this.visit(node.body);
@@ -149,7 +187,7 @@ export class ComplexityAnalyzer {
         );
         const spaceComplexity = bodyComplexity.space || new Complexity();
 
-        this.addResult("ForStatement", node, timeComplexity, spaceComplexity);
+        this.addResult(node.type, node, timeComplexity, spaceComplexity);
 
         return { time: timeComplexity, space: spaceComplexity };
     }
@@ -164,7 +202,7 @@ export class ComplexityAnalyzer {
         );
         const spaceComplexity = bodyComplexity.space || new Complexity();
 
-        this.addResult("WhileStatement", node, timeComplexity, spaceComplexity);
+        this.addResult(node.type, node, timeComplexity, spaceComplexity);
 
         return { time: timeComplexity, space: spaceComplexity };
     }
@@ -189,7 +227,7 @@ export class ComplexityAnalyzer {
             consequentComplexity.space || new Complexity()
         ).max(alternateComplexity.space || new Complexity());
 
-        this.addResult("IfStatement", node, timeComplexity, spaceComplexity);
+        this.addResult(node.type, node, timeComplexity, spaceComplexity);
 
         return { time: timeComplexity, space: spaceComplexity };
     }
@@ -205,16 +243,24 @@ export class ComplexityAnalyzer {
         // check for known patterns
         if (node.callee.type === "MemberExpression") {
             const methodName = node.callee.property["name"];
-            if (["push", "pop", "shift", "unshift"].includes(methodName)) {
-                complexity = new Complexity("1");
-            } else if (["indexOf", "includes", "find"].includes(methodName)) {
+            if (
+                [
+                    "indexOf",
+                    "includes",
+                    "find",
+                    "map",
+                    "filter",
+                    "reduce",
+                    "forEach"
+                ].includes(methodName)
+            ) {
                 complexity = new Complexity("n");
             } else if (["sort"].includes(methodName)) {
                 complexity = new Complexity("n*log(n)");
             }
         }
 
-        this.addResult("CallExpression", node, complexity, new Complexity());
+        this.addResult(node.type, node, complexity, new Complexity());
 
         return { time: complexity, space: new Complexity() };
     }
@@ -235,14 +281,30 @@ export class ComplexityAnalyzer {
             }
         }
 
-        this.addResult(
-            "VariableDeclaration",
-            node,
-            new Complexity(),
-            spaceComplexity
-        );
+        this.addResult(node.type, node, new Complexity(), spaceComplexity);
 
         return { time: new Complexity(), space: spaceComplexity };
+    }
+
+    private visitClassDeclaration(node: ClassDeclaration): WCBlockResult {
+        let timeComplexity = new Complexity();
+        let spaceComplexity = new Complexity();
+
+        if (node.body && Array.isArray(node.body.body)) {
+            for (const member of node.body.body) {
+                const stmtComplexity = this.visit(member);
+                timeComplexity = timeComplexity.add(
+                    stmtComplexity.time || stmtComplexity
+                );
+                spaceComplexity = spaceComplexity.add(
+                    stmtComplexity.space || new Complexity()
+                );
+            }
+        }
+
+        this.addResult(node.type, node, timeComplexity, spaceComplexity);
+
+        return { time: timeComplexity, space: spaceComplexity };
     }
 
     private visitGeneric(node: Node): WCBlockResult {
@@ -285,10 +347,15 @@ export class ComplexityAnalyzer {
      * - improve heuristics
      */
     private analyzeLoopBounds(
-        node: WhileStatement | ForStatement | DoWhileStatement
+        node:
+            | WhileStatement
+            | DoWhileStatement
+            | ForStatement
+            | ForInStatement
+            | ForOfStatement
     ): Complexity {
         // simple heuristic: look for common patterns
-        if (node.test && node.test.type === "BinaryExpression") {
+        if ("test" in node && node.test?.type === "BinaryExpression") {
             // assume O(n) iterations for most loops
             return new Complexity("n");
         }

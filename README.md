@@ -38,13 +38,13 @@ Check the Monaco Editor integration demo:
 
 ```bash
 # npm
-npm install acorn worstcase
+npm install @babel/parser worstcase
+```
 
-# yarn
-yarn add acorn worstcase
+For TypeScript users, add `@babel/types`
 
-# pnpm
-pnpm add acorn worstcase
+```bash
+npm install @babel/types
 ```
 
 ## Basic Usage

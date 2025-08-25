@@ -12,5 +12,6 @@ export default defineBuildConfig({
         esbuild: {
             minify: true
         }
-    }
+    },
+    externals: ["@babel/parser", "@babel/types"]
 });
